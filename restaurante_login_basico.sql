@@ -9,6 +9,7 @@ CREATE DATABASE IF NOT EXISTS `restaurante` CHARACTER SET utf8mb4 COLLATE utf8mb
 USE `restaurante`;
 
 DROP TABLE IF EXISTS `login_audit`;
+DROP TABLE IF EXISTS `pedidos`;
 DROP TABLE IF EXISTS `users_login`;
 
 CREATE TABLE `users_login` (
@@ -39,6 +40,13 @@ CREATE TABLE `login_audit` (
   PRIMARY KEY (`id`),
   KEY `idx_login_audit_user_id` (`user_id`),
   CONSTRAINT `fk_login_audit_user` FOREIGN KEY (`user_id`) REFERENCES `users_login` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `pedidos` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `valor` decimal(10,2) NOT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `users_login` (`username`, `email`, `password_hash`, `role`, `is_active`) VALUES

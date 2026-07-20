@@ -30,7 +30,7 @@ if (isset($_POST['entrar'])) {
             $_SESSION['usuario_id'] = $user['id'];
             
             // manda o usuario para a pagina de administracao
-            header("Location: admin.php");
+            header("Location: ../admin/index.php");
             exit(); // para a execucao do codigo aqui
         }
 
