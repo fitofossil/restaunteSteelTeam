@@ -2,11 +2,11 @@
 session_start();
 
 if (empty($_SESSION['usuario'])) {
-    header('Location: ../telalogin/index.php');
+    header('Location: ../public/index.php');
     exit();
 }
 
-require_once __DIR__ . '/../telalogin/conexao.php';
+require_once __DIR__ . '/../config/conexao.php';
 
 $mensagem = '';
 $tipoMensagem = '';
@@ -81,7 +81,7 @@ try {
                 <h1>Painel administrativo</h1>
                 <p class="boas-vindas">Olá, <?php echo htmlspecialchars($_SESSION['usuario']); ?>. Acompanhe o movimento de hoje.</p>
             </div>
-            <a class="sair" href="../telalogin/index.php">Sair</a>
+            <a class="sair" href="../public/index.php">Sair</a>
         </header>
 
         <?php if ($mensagem): ?>

@@ -12,7 +12,7 @@ if (isset($_POST['entrar'])) {
     $senha = trim($_POST['senha'] ?? '');
 
     // puxa o arquivo que faz a conexao com o banco de dados
-    require_once __DIR__ . '/conexao.php';
+    require_once __DIR__ . '/../config/conexao.php';
 
     // tenta rodar os comandos do banco de dados de forma segura
     try {
@@ -30,7 +30,7 @@ if (isset($_POST['entrar'])) {
             $_SESSION['usuario_id'] = $user['id'];
             
             // manda o usuario para a pagina de administracao
-            header("Location: ../admin/index.php");
+            header("Location: ../templates/index.php");
             exit(); // para a execucao do codigo aqui
         }
 

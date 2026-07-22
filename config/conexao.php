@@ -5,7 +5,7 @@
 $host = "localhost";
 
 // porta padrao do Mysql 3306
-$port = "8080";
+$port = "3306";
 
 // nome do banco de dados
 $dbname = "restaurante";
