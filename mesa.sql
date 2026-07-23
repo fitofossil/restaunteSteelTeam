@@ -70,6 +70,19 @@ CREATE TABLE `comandapedidos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================================================
+-- TABELA: pedidos
+-- =========================================================
+-- Controle simples usado pela tela de pedidos da recepção.
+CREATE TABLE `pedidos` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `mesa_numero` smallint(5) UNSIGNED NOT NULL,
+  `valor` decimal(10,2) NOT NULL,
+  `status_pagamento` varchar(10) NOT NULL DEFAULT 'pendente', -- pendente ou pago
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================================================
 -- TABELA: users
 -- =========================================================
 -- Cadastro de usuários do sistema (login administrativo).
@@ -79,7 +92,7 @@ CREATE TABLE `users_login` (
   `username` varchar(45) NOT NULL,    -- Nome de login
   `email` varchar(100) NOT NULL,      -- Email do usuário
   `password_hash` varchar(255) NOT NULL, -- Senha criptografada (bcrypt)
-  `role` tinyint(3) UNSIGNED NOT NULL DEFAULT 3, -- Papel (1=admin, 2=gerente, 3=usuário comum)
+  `role` tinyint(3) UNSIGNED NOT NULL, -- Papel (1=admin, 2=gerente, 4=recepção)
   `is_active` tinyint(1) NOT NULL DEFAULT 1,     -- Indica se a conta está ativa
   `failed_attempts` smallint(5) UNSIGNED NOT NULL DEFAULT 0, -- Tentativas de login falhas
   `locked_until` datetime DEFAULT NULL, -- Data/hora até quando a conta está bloqueada

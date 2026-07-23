@@ -64,6 +64,11 @@ class Auth
             return ['sucesso' => false, 'mensagem' => 'Conta desativada. Contacte o administrador.'];
         }
 
+        // O perfil antigo "Funcionário" (3) não é mais utilizado pelo sistema.
+        if (!$this->validarRole($user['role'])) {
+            return ['sucesso' => false, 'mensagem' => 'Este perfil não é mais utilizado. Contacte o administrador.'];
+        }
+
         if (!password_verify($senha, $user['password_hash'])) {
             return ['sucesso' => false, 'mensagem' => 'E-mail ou senha incorretos.'];
         }
@@ -115,11 +120,61 @@ class Auth
         return isset($_SESSION['usuario_role']) && (int) $_SESSION['usuario_role'] === 1;
     }
 
+    public static function isGerente(): bool
+    {
+        return isset($_SESSION['usuario_role']) && (int) $_SESSION['usuario_role'] === 2;
+    }
+
+    public static function isRecepcao(): bool
+    {
+        return isset($_SESSION['usuario_role']) && (int) $_SESSION['usuario_role'] === 4;
+    }
+
     public static function requireAdmin(): void
     {
         self::requireLogin();
         if (!self::isAdmin()) {
             header('Location: ' . BASE_URL . '/templates/painel.php');
+            exit();
+        }
+    }
+
+    // A recepção trabalha diretamente na tela de pedidos, não no painel.
+    public static function requirePainel(): void
+    {
+        self::requireLogin();
+        if (self::isRecepcao()) {
+            header('Location: ' . BASE_URL . '/templates/pedidos.php');
+            exit();
+        }
+    }
+
+    // Administrador, gerente e recepção podem consultar os pedidos.
+    public static function requirePedidosView(): void
+    {
+        self::requireLogin();
+        if (!self::isAdmin() && !self::isGerente() && !self::isRecepcao()) {
+            header('Location: ' . BASE_URL . '/templates/painel.php');
+            exit();
+        }
+    }
+
+    // Recepção e administrador podem criar ou alterar pedidos.
+    public static function requireEditarPedidos(): void
+    {
+        self::requireLogin();
+        if (!self::isRecepcao() && !self::isAdmin()) {
+            header('Location: ' . BASE_URL . '/templates/pedidos.php');
+            exit();
+        }
+    }
+
+    // Administrador e gerente podem encerrar/zerar o caixa do dia.
+    public static function requireZerarCaixa(): void
+    {
+        self::requireLogin();
+        if (!self::isAdmin() && !self::isGerente()) {
+            header('Location: ' . BASE_URL . '/templates/pedidos.php');
             exit();
         }
     }
@@ -155,7 +210,7 @@ class Auth
 
     public function validarRole($role): bool
     {
-        return in_array((int) $role, [1, 2, 3], true);
+        return in_array((int) $role, [1, 2, 4], true);
     }
 
     public static function hashSenha(string $senha): string

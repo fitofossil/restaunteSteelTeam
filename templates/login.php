@@ -3,12 +3,15 @@
 // TELA DE LOGIN
 // =============================================================
 require_once __DIR__ . '/../src/Auth.php';
+
+// Caso a pessoa já esteja logada, evita exibir o formulário novamente.
 Auth::iniciarSessao();
 if (Auth::isLoggedIn()) {
-    header('Location: painel.php');
+    header('Location: ' . (Auth::isRecepcao() ? 'pedidos.php' : 'painel.php'));
     exit();
 }
 
+// Mensagem gerada pelo handler de login, se houve falha de autenticação.
 $erro = $_GET['erro'] ?? '';
 ?>
 <!DOCTYPE html>
@@ -25,12 +28,14 @@ $erro = $_GET['erro'] ?? '';
             <h1>🌭 Dogão Lanches</h1>
             <p class="subtitulo">Acesse o painel administrativo</p>
 
+            <!-- Envia as credenciais ao arquivo responsável por autenticar. -->
             <form method="POST" action="../auth.php">
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="senha" placeholder="Senha" required>
                 <button type="submit" name="entrar">Entrar</button>
             </form>
 
+            <!-- A saída é escapada para que uma mensagem não injete HTML na página. -->
             <?php if ($erro): ?>
                 <p class="erro"><?php echo htmlspecialchars($erro); ?></p>
             <?php endif; ?>

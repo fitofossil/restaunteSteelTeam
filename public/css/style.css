@@ -121,6 +121,7 @@ h2 { font-size: 1.55rem; margin: 6px 0; }
    CARDS DE RESUMO
    ============================================================= */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 24px; }
+.cards.cards-uma { grid-template-columns: minmax(220px, 320px); }
 .card {
     display: flex; gap: 14px; align-items: center; padding: 22px;
     background: #fffaf1; border: 1px solid #dfc69d; border-radius: 13px;
@@ -137,6 +138,8 @@ h2 { font-size: 1.55rem; margin: 6px 0; }
    GRADE DE 2 COLUNAS
    ============================================================= */
 .grade { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, .9fr); gap: 24px; }
+.grade.pedidos-grade { grid-template-columns: minmax(0, 1.6fr) minmax(300px, .9fr); }
+.grade.pedidos-leitura { grid-template-columns: 1fr; }
 .bloco {
     background: #fffaf1; border: 1px solid #dfc69d; border-radius: 13px;
     box-shadow: 0 14px 28px rgba(0,0,0,.18); padding: 26px;
@@ -243,7 +246,9 @@ h2 { font-size: 1.55rem; margin: 6px 0; }
 .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: .74rem; font-weight: 600; white-space: nowrap; }
 .badge.perfil-1 { background: #f9d9d5; color: #8b2218; }
 .badge.perfil-2 { background: #f5e3bd; color: #7a5a1e; }
-.badge.perfil-3 { background: #d9f0dc; color: #195c2a; }
+.badge.perfil-4 { background: #dbeafe; color: #1d4ed8; }
+.badge.pagamento-pago { background: #d9f0dc; color: #195c2a; }
+.badge.pagamento-pendente { background: #f5e3bd; color: #7a5a1e; }
 
 /* =============================================================
    STATUS (Ativar / Desativar)
@@ -271,6 +276,8 @@ h2 { font-size: 1.55rem; margin: 6px 0; }
     color: #8b2218; font: 600 .8rem 'DM Sans', sans-serif; cursor: pointer; transition: background .2s;
 }
 .btn-excluir:hover { background: #f2b8b1; }
+.btn-zerar { width: 100%; margin-top: 4px; padding: 12px; }
+.formulario-perigo { border-color: #e3a29c; }
 .inline { display: inline; }
 
 /* =============================================================
@@ -282,10 +289,12 @@ h2 { font-size: 1.55rem; margin: 6px 0; }
     border-radius: 13px; box-shadow: 0 14px 28px rgba(0,0,0,.18);
 }
 .formulario-card h2 { margin-bottom: 14px; }
+.formulario-card p:not(.etiqueta) { color: #806a57; line-height: 1.5; margin: 0 0 14px; font-size: .9rem; }
 .formulario-card label { display: block; margin-bottom: 6px; font-size: .85rem; font-weight: 600; color: #5b3920; }
 .formulario-card input[type="text"],
 .formulario-card input[type="email"],
 .formulario-card input[type="password"],
+.formulario-card input[type="number"],
 .formulario-card select {
     width: 100%; border: 1px solid #d8c3a0; border-radius: 7px;
     background: #fffdf8; color: #3b2618; padding: 10px 12px; font: inherit; margin-bottom: 12px;
@@ -306,7 +315,7 @@ h2 { font-size: 1.55rem; margin: 6px 0; }
    ============================================================= */
 @media (max-width: 760px) {
     .painel { padding: 30px 16px; }
-    .cards { grid-template-columns: 1fr; }
+    .cards, .cards.cards-uma { grid-template-columns: 1fr; }
     .grade { grid-template-columns: 1fr; }
     .topo { gap: 16px; }
     .topo-botoes { flex-wrap: wrap; }

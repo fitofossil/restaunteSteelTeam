@@ -4,8 +4,10 @@
 // =============================================================
 require_once __DIR__ . '/../src/Auth.php';
 require_once __DIR__ . '/../config/conexao.php';
+// Esta página inteira é exclusiva de administradores.
 Auth::requireAdmin();
 
+// Variáveis usadas para retornar resultado das ações e preencher o formulário de edição.
 $mensagem = '';
 $tipoMensagem = '';
 $funcionarioEditando = null;
@@ -23,8 +25,9 @@ try {
             if ($username === '' || mb_strlen($username) > 45) throw new RuntimeException('Informe um nome válido (máx. 45 caracteres).');
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Informe um e-mail válido.');
             if (strlen($senha) < 6) throw new RuntimeException('A senha deve ter no mínimo 6 caracteres.');
-            if (!$role || $role < 1 || $role > 3) throw new RuntimeException('Selecione um perfil válido.');
+            if (!$role || !in_array($role, [1, 2, 4], true)) throw new RuntimeException('Selecione um perfil válido.');
 
+            // Impede duas contas usando o mesmo e-mail de login.
             $check = $conn->prepare('SELECT id FROM users_login WHERE email = ? LIMIT 1');
             $check->execute([$email]);
             if ($check->fetch()) throw new RuntimeException('Este e-mail já está cadastrado.');
@@ -47,7 +50,7 @@ try {
             if (!$id) throw new RuntimeException('Funcionário inválido.');
             if ($username === '' || mb_strlen($username) > 45) throw new RuntimeException('Informe um nome válido (máx. 45 caracteres).');
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) throw new RuntimeException('Informe um e-mail válido.');
-            if (!$role || $role < 1 || $role > 3) throw new RuntimeException('Selecione um perfil válido.');
+            if (!$role || !in_array($role, [1, 2, 4], true)) throw new RuntimeException('Selecione um perfil válido.');
 
             $check = $conn->prepare('SELECT id FROM users_login WHERE email = ? AND id != ? LIMIT 1');
             $check->execute([$email, $id]);
@@ -64,6 +67,7 @@ try {
                 $stmt->execute([$username, $email, $role, $is_active, $id]);
             }
 
+            // Se o admin alterou a própria conta, mantém o nome e perfil da sessão atualizados.
             if ($id == Auth::getId()) {
                 $_SESSION['usuario'] = $username;
                 $_SESSION['usuario_role'] = $role;
@@ -95,7 +99,7 @@ try {
         }
     }
 
-    // LISTAR FUNCIONÁRIOS
+    // LISTAR FUNCIONÁRIOS: busca opcional por nome ou e-mail.
     $busca = trim($_GET['busca'] ?? '');
     if ($busca !== '') {
         $stmt = $conn->prepare('SELECT id, username, email, role, is_active FROM users_login WHERE username LIKE ? OR email LIKE ? ORDER BY username');
@@ -120,7 +124,8 @@ try {
     $mensagem = 'Erro ao acessar o banco de dados.'; $tipoMensagem = 'erro'; $funcionarios = [];
 }
 
-$roles = [1 => 'Administrador', 2 => 'Gerente', 3 => 'Funcionário'];
+// Mapa usado tanto para exibição quanto para as opções do formulário.
+$roles = [1 => 'Administrador', 2 => 'Gerente', 4 => 'Recepção'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
