@@ -74,7 +74,7 @@ CREATE TABLE `comandapedidos` (
 -- =========================================================
 -- Cadastro de usuários do sistema (login administrativo).
 -- Inclui controle de tentativas de login e bloqueio.
-CREATE TABLE `users` (
+CREATE TABLE `users_login` (
   `id` int(10) UNSIGNED NOT NULL,     -- Identificador único do usuário
   `username` varchar(45) NOT NULL,    -- Nome de login
   `email` varchar(100) NOT NULL,      -- Email do usuário
@@ -101,4 +101,13 @@ CREATE TABLE `login_audit` (
   `reason` varchar(100) DEFAULT NULL     -- Motivo da falha (ex.: senha incorreta)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+-- Usuário administrativo inicial
+-- Login: admin@restaurante.local | Senha: admin
+INSERT INTO `users_login` (
+  `id`, `username`, `email`, `password_hash`, `role`, `is_active`,
+  `failed_attempts`, `locked_until`
+) VALUES (
+  1, 'admin', 'admin@restaurante.local',
+  '$2y$10$C.p3cBfBgZ1No8unosWRvuDZ.xTeNLgoJxKZEt4fLljGBaXdSNzUy',
+  1, 1, 0, NULL
+);

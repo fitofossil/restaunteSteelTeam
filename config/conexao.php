@@ -10,7 +10,11 @@ if (!defined('BASE_URL')) {
 }
 
 $host = "localhost";
+// porta padrao do Mysql 3306
 $port = "3306";
+
+// nome do banco de dados
+>>>>> Stashed changes
 $dbname = "restaurante";
 $user = "root";
 $password = "";
