@@ -16,19 +16,7 @@ $tipoMensagem = '';
 $mostrarResumoPedidos = Auth::isAdmin() || Auth::isGerente() || Auth::isRecepcao();
 
 try {
-    // Ação de manutenção da equipe disponível no próprio painel.
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['salvar_email'])) {
-            $id = filter_input(INPUT_POST, 'usuario_id', FILTER_VALIDATE_INT);
-            $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-            if (!$id || !$email) throw new RuntimeException('Informe um e-mail válido.');
-            $stmt = $conn->prepare('UPDATE users_login SET email = :email WHERE id = :id');
-            $stmt->execute([':email' => $email, ':id' => $id]);
-            $mensagem = 'E-mail atualizado com sucesso.';
-            $tipoMensagem = 'sucesso';
-        }
-
-    }
+    // A ação de manutenção da equipe no painel não permite editar e-mails.
 
     // Dados exibidos no painel: lista da equipe e quantidade de contas ativas.
     $usuarios = $conn->query('SELECT id, username, email, is_active FROM users_login ORDER BY username')->fetchAll(PDO::FETCH_ASSOC);
@@ -92,13 +80,11 @@ try {
                 <div class="titulo-bloco"><div><p class="etiqueta">EQUIPE</p><h2>Usuários cadastrados</h2></div><span><?php echo count($usuarios); ?> usuários</span></div>
                 <div class="lista-usuarios">
                     <?php foreach ($usuarios as $usuario): ?>
-                        <form method="POST" class="linha-usuario">
+                        <div class="linha-usuario">
                             <div class="avatar"><?php echo strtoupper(htmlspecialchars(mb_substr($usuario['username'], 0, 1))); ?></div>
                             <div class="nome"><strong><?php echo htmlspecialchars($usuario['username']); ?></strong><small><?php echo $usuario['is_active'] ? 'Ativo' : 'Inativo'; ?></small></div>
-                            <input type="hidden" name="usuario_id" value="<?php echo (int)$usuario['id']; ?>">
-                            <input type="email" name="email" value="<?php echo htmlspecialchars($usuario['email']); ?>" required>
-                            <button type="submit" name="salvar_email">Salvar</button>
-                        </form>
+                            <div class="email-usuario"><?php echo htmlspecialchars($usuario['email']); ?></div>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             </article>

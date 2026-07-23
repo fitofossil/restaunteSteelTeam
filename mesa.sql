@@ -7,6 +7,24 @@
 -- - Usuários e auditoria de login
 -- =========================================================
 
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+-- Criando banco de dados
+CREATE DATABASE IF NOT EXISTS `restaurante` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `restaurante`;
+
+-- Remoção das tabelas na ordem inversa das chaves estrangeiras para evitar erros
+DROP TABLE IF EXISTS `login_audit`;
+DROP TABLE IF EXISTS `usuarios`;
+DROP TABLE IF EXISTS `comanda_pedidos`;
+DROP TABLE IF EXISTS `mesas`;
+DROP TABLE IF EXISTS `produtos`;
+DROP TABLE IF EXISTS `tipos_produto`;
+DROP TABLE IF EXISTS `categorias_produto`;
+
 -- =========================================================
 -- TABELA: categorias_produto
 -- =========================================================
@@ -114,6 +132,8 @@ CREATE TABLE `login_audit` (
   `reason` varchar(100) DEFAULT NULL     -- Motivo da falha (ex.: senha incorreta)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+-- POPULANDO O BANCO DE DADOS
 -- Usuário administrativo inicial
 -- Login: admin@restaurante.local | Senha: admin
 INSERT INTO `users_login` (

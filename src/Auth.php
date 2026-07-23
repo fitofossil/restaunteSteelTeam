@@ -127,7 +127,7 @@ class Auth
 
     public static function isRecepcao(): bool
     {
-        return isset($_SESSION['usuario_role']) && (int) $_SESSION['usuario_role'] === 4;
+        return isset($_SESSION['usuario_role']) && (int) $_SESSION['usuario_role'] === 3;
     }
 
     public static function requireAdmin(): void
@@ -210,7 +210,7 @@ class Auth
 
     public function validarRole($role): bool
     {
-        return in_array((int) $role, [1, 2, 4], true);
+        return in_array((int) $role, [1, 2, 3], true);
     }
 
     public static function hashSenha(string $senha): string
